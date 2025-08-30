@@ -20,16 +20,16 @@ public class PagamentoDTO {
     private BigDecimal valor;
     @NotNull(message = "Campo requerido")
     @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
-    private String nome;
+    private String nome;//
     @NotNull(message = "Campo requerido")
     @Size(min = 16, max = 19, message = "O número deve ter entre 16 e 19")
-    private String numeroDoCarto;
+    private String numeroDoCartao;//
     @NotNull(message = "Campo requerido")
     @Size(min = 5, max = 5, message = "Validade deve ter 5 caracteres")
     private String validade;
     @NotNull(message = "Campo requerido")
     @Size(min = 3, max = 3, message = "Código de segurança deve ter 3 caracteres")
-    private String codigoDeSeguranaca;
+    private String codigoDeSeguranca;
     @NotNull(message = "Forma de pagamento Id é obrigatório")
     private Long formaDePagamentoId;
 
@@ -37,9 +37,9 @@ public class PagamentoDTO {
         id = entity.getId();
         valor = entity.getValor();
         nome = entity.getNome();
-        numeroDoCarto = entity.getNumeroDoCartao();
+        numeroDoCartao = entity.getNumeroDoCartao();
         validade = entity.getValidade();
-        codigoDeSeguranaca = entity.getCodigoDeSeguranca();
+        codigoDeSeguranca = entity.getCodigoDeSeguranca();
         formaDePagamentoId = entity.getFormaDePagamentoId();
     }
 }

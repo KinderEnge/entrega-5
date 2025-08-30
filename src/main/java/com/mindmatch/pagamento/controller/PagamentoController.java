@@ -1,6 +1,7 @@
 package com.mindmatch.pagamento.controller;
 
 
+import com.mindmatch.pagamento.dto.FormDTO;
 import com.mindmatch.pagamento.dto.PagamentoDTO;
 import com.mindmatch.pagamento.service.PagamentoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,6 +53,12 @@ public class PagamentoController {
     public ResponseEntity<PagamentoDTO>getById(@PathVariable Long id){
         PagamentoDTO dto = service.getById(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value = "forms", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PagamentoDTO>> getByForms(@RequestBody FormDTO formDTO) {
+        List<PagamentoDTO> result = service.getByForm(formDTO);
+        return ResponseEntity.ok(result);
     }
 
     @Operation(
