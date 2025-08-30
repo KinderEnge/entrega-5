@@ -49,7 +49,7 @@ function PaymentsScreen(props){
               <li className="item" key={p.id}>
                 <div>
                   <strong>{p.nome}</strong>
-                  <div className="meta">R$ {p.valor} • {methodLabel(p.formaDePagamentoId)} • ****{p.numeroDoCarto ? p.numeroDoCarto.slice(-4) : ''}</div>
+                  <div className="meta">R$ {p.valor} • {methodLabel(p.formaDePagamentoId)} • ****{p.numeroDoCarto ? p.numeroDoCarto.slice(-4) : ''}{p.transactionDate ? ' • ' + formatDateDisplay(p.transactionDate) : ''}</div>
                 </div>
                 <div className="actions">
                   <button onClick={()=>onEdit(p)}>Editar</button>
@@ -62,12 +62,14 @@ function PaymentsScreen(props){
 
         <section className="panel">
           <h3>{editingId ? 'Editar pagamento' : 'Criar pagamento'}</h3>
-          <div className="form">
+            <div className="form">
             <input placeholder="Nome" value={form.nome} onChange={e=>setForm({...form, nome: e.target.value})} maxLength={100} />
             <input placeholder="Valor (ex: 99.90)" value={form.valor} onChange={e=>setForm({...form, valor: e.target.value})} />
             <input placeholder="Número do cartão (apenas números)" value={form.numeroDoCarto} onChange={e=>setForm({...form, numeroDoCarto: e.target.value.replace(/\D/g,'')})} maxLength={19} />
             <input placeholder="Validade (MM/YY)" value={form.validade} onChange={e=>setForm({...form, validade: e.target.value})} maxLength={5} />
             <input placeholder="CVV (3-4 dígitos)" value={form.codigoDeSeguranaca} onChange={e=>setForm({...form, codigoDeSeguranaca: e.target.value.replace(/\D/g,'')})} maxLength={4} />
+            <label style={{ fontSize: 12, color: '#666' }}>Data da transação</label>
+            <input type="date" value={form.transactionDate || ''} onChange={e=>setForm({...form, transactionDate: e.target.value})} />
             <div style={{ display: 'flex', gap: 8 }}>
               <select value={form.formaDePagamentoId} onChange={e=>setForm({...form, formaDePagamentoId: parseInt(e.target.value)})}>
                 <option value={1}>Crédito</option>
@@ -83,9 +85,20 @@ function PaymentsScreen(props){
   )
 }
 
+function formatDateDisplay(dateStr){
+  try{
+    const d = new Date(dateStr)
+    if(isNaN(d)) return dateStr
+    const day = String(d.getDate()).padStart(2,'0')
+    const month = String(d.getMonth()+1).padStart(2,'0')
+  const year = d.getFullYear()
+  return `${day}/${month}/${year}`
+  }catch(e){ return dateStr }
+}
+
 export default function App(){
   const [pagamentos, setPagamentos] = useState([])
-  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1 })
+  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '' })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const [authHeader, setAuthHeader] = useState(null)
@@ -110,8 +123,18 @@ export default function App(){
   function doLogin(username, password){
     if(!username || !password){ setMessage({ type:'error', text: 'Informe usuário e senha' }); return }
     const token = btoa(`${username}:${password}`)
-    setAuthHeader('Basic ' + token)
-    setMessage({ type:'success', text: 'Logado com sucesso' })
+    const header = 'Basic ' + token
+    // validate with backend
+    fetch(`${API_BASE}/auth/validate`, { method: 'GET', headers: { 'Authorization': header } })
+      .then(res => {
+        if(res.ok){
+          setAuthHeader(header)
+          setMessage({ type:'success', text: 'Logado com sucesso' })
+        }else{
+          setMessage({ type:'error', text: 'Credenciais inválidas' })
+        }
+      })
+      .catch(err => { console.error('Erro validar auth', err); setMessage({ type:'error', text: 'Erro ao validar credenciais' }) })
   }
 
   function doLogout(){ setAuthHeader(null); setMessage({ type:'success', text: 'Logout realizado' }) }
@@ -122,10 +145,11 @@ export default function App(){
       nome: p.nome || '',
       valor: p.valor != null ? String(p.valor) : '',
       // backend has inconsistent field names in DTOs: handle both
-      numeroDoCarto: p.numeroDoCarto || p.numeroDoCartao || '',
-      validade: p.validade || '',
-      codigoDeSeguranaca: p.codigoDeSeguranaca || p.codigoDeSeguranca || '',
-      formaDePagamentoId: p.formaDePagamentoId || 1
+  numeroDoCarto: p.numeroDoCarto || p.numeroDoCartao || '',
+  validade: p.validade || '',
+  codigoDeSeguranaca: p.codigoDeSeguranaca || p.codigoDeSeguranca || '',
+  formaDePagamentoId: p.formaDePagamentoId || 1,
+  transactionDate: p.transactionDate || ''
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -149,7 +173,10 @@ export default function App(){
     try{
       const url = editingId ? `${API_BASE}/pagamentos/${editingId}` : `${API_BASE}/pagamentos`
       const method = editingId ? 'PUT' : 'POST'
-      const res = await fetch(url, { method, headers: headers(), body: JSON.stringify({ ...form, valor: parseFloat(form.valor) }) })
+  const payload = { ...form, valor: parseFloat(form.valor) }
+  // ensure transactionDate is either null or ISO date string
+  if(!payload.transactionDate) delete payload.transactionDate
+  const res = await fetch(url, { method, headers: headers(), body: JSON.stringify(payload) })
       if(res.status === 200 || res.status === 201){
         setMessage({ type:'success', text: editingId ? 'Pagamento atualizado' : 'Pagamento criado' })
         await fetchList()

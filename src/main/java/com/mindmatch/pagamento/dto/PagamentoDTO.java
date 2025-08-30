@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +33,7 @@ public class PagamentoDTO {
     private String codigoDeSeguranaca;
     @NotNull(message = "Forma de pagamento Id é obrigatório")
     private Long formaDePagamentoId;
+    private LocalDate transactionDate;
 
     public PagamentoDTO(Pagamento entity) {
         id = entity.getId();
@@ -41,5 +43,10 @@ public class PagamentoDTO {
         validade = entity.getValidade();
         codigoDeSeguranaca = entity.getCodigoDeSeguranca();
         formaDePagamentoId = entity.getFormaDePagamentoId();
+        transactionDate = entity.getTransactionDate();
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
     }
 }

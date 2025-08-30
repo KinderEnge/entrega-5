@@ -76,5 +76,6 @@ public class PagamentoService {
         entity.setValidade(dto.getValidade());
         entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranaca());
         entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
+    entity.setTransactionDate(dto.getTransactionDate());
     }
 }
