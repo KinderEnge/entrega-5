@@ -50,6 +50,7 @@ function PaymentsScreen(props){
                 <div>
                   <strong>{p.nome}</strong>
                   <div className="meta">R$ {p.valor} • {methodLabel(p.formaDePagamentoId)} • ****{p.numeroDoCarto ? p.numeroDoCarto.slice(-4) : ''}{p.transactionDate ? ' • ' + formatDateDisplay(p.transactionDate) : ''}</div>
+                  {p.descricao && <div className="description">{p.descricao}</div>}
                 </div>
                 <div className="actions">
                   <button onClick={()=>onEdit(p)}>Editar</button>
@@ -68,6 +69,7 @@ function PaymentsScreen(props){
             <input placeholder="Número do cartão (apenas números)" value={form.numeroDoCarto} onChange={e=>setForm({...form, numeroDoCarto: e.target.value.replace(/\D/g,'')})} maxLength={19} />
             <input placeholder="Validade (MM/YY)" value={form.validade} onChange={e=>setForm({...form, validade: e.target.value})} maxLength={5} />
             <input placeholder="CVV (3-4 dígitos)" value={form.codigoDeSeguranaca} onChange={e=>setForm({...form, codigoDeSeguranaca: e.target.value.replace(/\D/g,'')})} maxLength={4} />
+            <input placeholder="Descrição da compra" value={form.descricao} onChange={e=>setForm({...form, descricao: e.target.value})} maxLength={255} />
             <label style={{ fontSize: 12, color: '#666' }}>Data da transação</label>
             <input type="date" value={form.transactionDate || ''} onChange={e=>setForm({...form, transactionDate: e.target.value})} />
             <div style={{ display: 'flex', gap: 8 }}>
@@ -98,7 +100,7 @@ function formatDateDisplay(dateStr){
 
 export default function App(){
   const [pagamentos, setPagamentos] = useState([])
-  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '' })
+  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const [authHeader, setAuthHeader] = useState(null)
@@ -149,12 +151,13 @@ export default function App(){
   validade: p.validade || '',
   codigoDeSeguranaca: p.codigoDeSeguranaca || p.codigoDeSeguranca || '',
   formaDePagamentoId: p.formaDePagamentoId || 1,
-  transactionDate: p.transactionDate || ''
+  transactionDate: p.transactionDate || '',
+  descricao: p.descricao || ''
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function cancelEdit(){ setEditingId(null); setForm({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1 }) }
+  function cancelEdit(){ setEditingId(null); setForm({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' }) }
 
   function validate(){
     if(!form.nome || form.nome.length < 2) return 'Nome deve ter ao menos 2 caracteres'
