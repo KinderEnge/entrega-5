@@ -83,17 +83,5 @@ API para cadastro, consulta, atualização e remoção de pagamentos. Inclui aut
   - `spring.datasource.driver-class-name=org.h2.Driver`
   - `spring.jpa.hibernate.ddl-auto=update`
 
-## Git Workflow
-- Branch principal: `main`
-- Branch de desenvolvimento: `branchGabriel`
-- Para forçar push:
-  ```shell
-  git push origin branchGabriel --force
-  ```
-- Para transformar `main` na sua branch:
-  ```shell
-  git checkout main
-  git merge branchGabriel
-  git push origin main
-  ```
+
 
