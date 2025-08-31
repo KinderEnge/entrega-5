@@ -97,10 +97,3 @@ API para cadastro, consulta, atualização e remoção de pagamentos. Inclui aut
   git push origin main
   ```
 
-## Autores
-- Gabriel
-- KinderEnge
-
----
-
-> Para dúvidas, consulte o arquivo `HELP.md` ou abra uma issue no repositório.
