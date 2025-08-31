@@ -55,8 +55,17 @@ public class PagamentoController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping(value = "forms", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PagamentoDTO>> getByForms(@RequestBody FormDTO formDTO) {
+    @Operation(
+            description = "Consulta todos os pagementos que correspondem ao furmulário",
+            summary = "Consulta todos os pagamentos de acordo com os campos do formulário",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401")
+            }
+    )
+    @GetMapping(value = "/forms", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PagamentoDTO>> getByForms(@RequestBody @Valid FormDTO formDTO) {
         List<PagamentoDTO> result = service.getByForm(formDTO);
         return ResponseEntity.ok(result);
     }
@@ -66,7 +75,7 @@ public class PagamentoController {
             summary = "Salva um novo pagamento.",
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201"),
-                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+                    @ApiResponse(description = "Unprocessable Entity", responseCode = "422"),
                     @ApiResponse(description = "Unauthorized", responseCode = "401")
             }
     )
@@ -84,7 +93,7 @@ public class PagamentoController {
             summary = "Atualiza o pagamento pelo id.",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200"),
-                    @ApiResponse(description = "Bad Request", responseCode = "400"),
+                    @ApiResponse(description = "Unprocessable Entity", responseCode = "422"),
                     @ApiResponse(description = "Unauthorized", responseCode = "401"),
                     @ApiResponse(description = "Not Found", responseCode = "404")
             }
