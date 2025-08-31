@@ -67,7 +67,7 @@ public class PagamentoController {
     @PostMapping(value = "/forms", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PagamentoDTO>> getByForms(@RequestBody @Valid FormDTO formDTO) {
         List<PagamentoDTO> result = service.getByForm(formDTO);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result); 
     }
 
     @Operation(
@@ -121,3 +121,4 @@ public class PagamentoController {
     }
 
 }
+//
