@@ -64,7 +64,7 @@ public class PagamentoController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401")
             }
     )
-    @GetMapping(value = "/forms", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/forms", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PagamentoDTO>> getByForms(@RequestBody @Valid FormDTO formDTO) {
         List<PagamentoDTO> result = service.getByForm(formDTO);
         return ResponseEntity.ok(result);
