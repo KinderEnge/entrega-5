@@ -43,7 +43,7 @@ public class PagamentoService {
             throw new DatabaseException("Ao menos um dos campos deve ser preenchido");
         }
 
-        Specification<Pagamento> specification = PagamentoSpecification.fomrFiltro(formDTO);
+        Specification<Pagamento> specification = PagamentoSpecification.formFiltro(formDTO);
 
         return repository.findAll(specification)
                 .stream().map(PagamentoDTO::new)
