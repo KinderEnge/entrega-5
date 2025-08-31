@@ -1,0 +1,20 @@
+<div class="principal">
+  <div class="modal">
+    <div class="title">
+        <h1>Login</h1>
+    </div>
+    <div class="forms">
+        <p *ngIf="invalido">Usuario ou Senha Invalida</p>
+        <div class="form">
+            <label for="">Usuario:</label>
+            <input type="text" [(ngModel)]="username">
+        </div>
+        <div class="form">
+            <label for="">Senha:</label>
+            <input type="password" [(ngModel)]="password">
+        </div>
+        
+        <button class="btnLogin" (click)="login()">Entrar</button>
+    </div>
+  </div>
+</div>

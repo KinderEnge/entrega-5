@@ -1,0 +1,80 @@
+<div class="principal">
+  <div class="top">
+    <div class="titles">
+      <h1>Dashboard</h1>
+      <p>Visão geral dos pagamentos</p>
+    </div>
+  </div>
+  <div class="cards">
+    <home-card
+      icon="⌛"
+      label="Transação mais recente"
+      [dado]="formatarParaReal(transRecente)"
+      porcentagem="12%"
+    ></home-card>
+    <home-card
+      icon="💰"
+      label="Maior Transação"
+      dado="{{ formatarParaReal(maiorTransacao) }}"
+      porcentagem="12%"
+    ></home-card>
+    <home-card
+      icon="📊"
+      label="Valor Total de Transações"
+      dado="{{ formatarParaReal(totalTransacoes) }}"
+      porcentagem=""
+    ></home-card>
+    <home-card
+      icon="✅"
+      label="Total de transações feitas"
+      dado="{{ totalTransacoesFeitas }}"
+      porcentagem=""
+    ></home-card>
+  </div>
+  <div class="list">
+    <div class="infos">
+      <h3 style="color: #262626">Transações Recentes</h3>
+      <p style="color: #707070">Ultimas movimentações do sistema</p>
+    </div>
+    <div class="table">
+      <table>
+        <thead style="background-color: #efefef">
+          <tr>
+            <th style="width: 1%"></th>
+            <th align="start">Nome</th>
+            <th align="start">Valor</th>
+            <th align="start">Data de Pagamento</th>
+            <th align="start">N. Cartão</th>
+            <th align="start">CVV</th>
+            <th align="start">Validade</th>
+            <th align="start">Forma de pagam.</th>
+            <th align="start"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dado of pessoal">
+            <td align="center">👤</td>
+            <td align="start">{{ dado.nome }}</td>
+            <td align="start">{{ formatarParaReal(dado.valor) }}</td>
+            <td align="start">{{ dado.transactionDate }}</td>
+            <td align="start">{{ dado.numeroDoCartao }}</td>
+            <td align="start">{{ dado.codigoDeSeguranca }}</td>
+            <td align="start">{{ dado.validade }}</td>
+
+            @if (dado.formaDePagamentoId == 1){
+              <td align="start">Crédito</td>
+            } @else if (dado.formaDePagamentoId == 2){
+              <td align="start">Débito</td>
+            }@else{
+              <td align="start"></td>
+            }
+
+            <td align="start" class="tdBtn">
+              <button class="btnSelecionar" (click)="selecionarUsuario(dado.nome, dado.numeroDoCartao)">Selecionar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+nav {
+  height: 10%;
+  background-color: #efefef;
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    list-style: none;
+    height: 100%;
+    li {
+      width: 33.3%;
+      height: 100%;
+      a {
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: #262626;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: large;
+        font-weight: bold;
+
+        p {
+          font-size: 1em;
+        }
+      }
+      a:hover {
+        color: #4e50c4;
+        background-color: #f9fafa;
+        border-bottom: 2px solid #4e50c4;
+      }
+    }
+  }
+}
+
+.active {
+  color: #4e50c4;
+  background-color: #f9fafa;
+  border-bottom: 2px solid #4e50c4;
+}

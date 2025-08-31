@@ -1,0 +1,100 @@
+<div class="principal">
+  <div class="top">
+    <h1>Pessoal</h1>
+    <p>Gerencie informações de um usuario especifico</p>
+  </div>
+  <div class="forms">
+    <div class="formTitle">
+      <p style="font-size: 2em">🔎</p>
+      <h3>Buscar Cliente</h3>
+      <p>Insira os dados do cliente para ver suas ultimas operações</p>
+    </div>
+    <div class="formInputs">
+      <div class="form">
+        <label for="Nome">Nome:</label>
+        <input type="text" id="nome" name="Nome" [(ngModel)]="nome" />
+      </div>
+      <div class="form">
+        <label for="NCartao">Numero do cartão:</label>
+        <input type="text" id="nCartao" name="NCartao" [(ngModel)]="nCartao" />
+      </div>
+    </div>
+    <p class="mensagem" *ngIf="mensagem">{{mensagem}}</p>
+    <div class="formsBtn">
+      <button type="button" class="btnBusca" (click)="obterDados(nome, nCartao)">Buscar Cliente</button>
+      <button type="button" class="btnLimpa" (click)="limparInfo()">Limpar Campos</button>
+    </div>
+  </div>
+  @if (mostraInfos){
+
+  <div class="cliente">
+    <div class="dados">
+      <div class="tituloDados">
+        <h3 style="color: #262626">Transações Recentes</h3>
+        <p style="color: #707070">Ultimas movimentações do sistema</p>
+      </div>
+      <div class="dadosUsur">
+        <div class="dado">
+          <label for="">Nome</label>
+          <p>{{nomeUsur}}</p>
+        </div>
+        <div class="dado">
+          <label for="">Numero do cartão</label>
+          <p>{{nCartaoUsur}}</p>
+        </div>
+        <div class="dado">
+          <label for="">CVV</label>
+          <p>{{cvv}}</p>
+        </div>
+        <div class="dado">
+          <label for="">Validade</label>
+          <p>{{validade}}</p>
+        </div>
+      </div>
+      <div class="curios">
+        <div class="curiosidade">
+            <p>{{nOperacoes}}</p>
+            <label for="">Numero de Operações</label>
+        </div>
+        <div class="curiosidade">
+            <p>{{totalTransacoes}}</p>
+            <label for="">Total Transferido</label>
+        </div>
+        <div class="curiosidade">
+            <p>{{tpPag}}</p>
+            <label for="">Forma de Pagamento recorrente</label>
+        </div>
+      </div>
+    </div>
+    <div class="list">
+      <div class="infos">
+        <h3 style="color: #262626">Transações Recentes</h3>
+        <p style="color: #707070">Ultimas movimentações do sistema</p>
+      </div>
+      <div class="table">
+        <table>
+          <thead style="background-color: #efefef">
+            <tr>
+              <th align="start">ID da Compra</th>
+              <th align="start">Valor</th>
+              <th align="start">Descrição</th>
+              <th align="start">Data da Transaçao</th>
+              <th align="start">Forma de pagam.</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let dado of pessoal">
+            <tr>
+              <td align="start">{{dado.id}}</td>
+              <td align="start">{{dado.valor}}</td>
+              <td align="start">{{dado.descricao}}</td>
+              <td align="start">{{dado.transactionDate}}</td>
+              <td align="start">{{dado.formaDePagamentoId == 1 ? "Crédito" : "Débito"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>
