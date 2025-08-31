@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +32,7 @@ public class PagamentoDTO {
     @NotNull(message = "Campo requerido")
     @Size(min = 16, max = 19, message = "O número deve ter entre 16 e 19")
     @Schema(description = "Numero do cartão utilizado no pagamento.")
-    private String numeroDoCartao;//
+    private String numeroDoCartao;
 
     @NotNull(message = "Campo requerido")
     @Size(min = 5, max = 5, message = "Validade deve ter 5 caracteres")
@@ -51,6 +50,7 @@ public class PagamentoDTO {
 
     @Schema(description = "Data da transação.")
     private LocalDate transactionDate;
+    private String descricao;
 
     public PagamentoDTO(Pagamento entity) {
         id = entity.getId();
@@ -61,6 +61,7 @@ public class PagamentoDTO {
         codigoDeSeguranca = entity.getCodigoDeSeguranca();
         formaDePagamentoId = entity.getFormaDePagamentoId();
         transactionDate = entity.getTransactionDate();
+        descricao = entity.getDescricao();
     }
 
 }

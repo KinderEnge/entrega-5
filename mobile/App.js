@@ -29,9 +29,9 @@ export default function App() {
     const payload = {
       nome,
       valor: parseFloat(valor),
-      numeroDoCarto: numero,
+      numeroDoCartao: numero,
       validade,
-      codigoDeSeguranaca: codigo,
+      codigoDeSeguranca: codigo,
       formaDePagamentoId: 1
     };
 

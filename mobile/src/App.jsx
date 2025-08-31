@@ -49,7 +49,7 @@ function PaymentsScreen(props){
               <li className="item" key={p.id}>
                 <div>
                   <strong>{p.nome}</strong>
-                  <div className="meta">R$ {p.valor} • {methodLabel(p.formaDePagamentoId)} • ****{p.numeroDoCarto ? p.numeroDoCarto.slice(-4) : ''}{p.transactionDate ? ' • ' + formatDateDisplay(p.transactionDate) : ''}</div>
+                  <div className="meta">R$ {p.valor} • {methodLabel(p.formaDePagamentoId)} • ****{p.numeroDoCartao ? p.numeroDoCartao.slice(-4) : ''}{p.transactionDate ? ' • ' + formatDateDisplay(p.transactionDate) : ''}</div>
                   {p.descricao && <div className="description">{p.descricao}</div>}
                 </div>
                 <div className="actions">
@@ -66,9 +66,9 @@ function PaymentsScreen(props){
             <div className="form">
             <input placeholder="Nome" value={form.nome} onChange={e=>setForm({...form, nome: e.target.value})} maxLength={100} />
             <input placeholder="Valor (ex: 99.90)" value={form.valor} onChange={e=>setForm({...form, valor: e.target.value})} />
-            <input placeholder="Número do cartão (apenas números)" value={form.numeroDoCarto} onChange={e=>setForm({...form, numeroDoCarto: e.target.value.replace(/\D/g,'')})} maxLength={19} />
+            <input placeholder="Número do cartão (apenas números)" value={form.numeroDoCartao} onChange={e=>setForm({...form, numeroDoCartao: e.target.value.replace(/\D/g,'')})} maxLength={19} />
             <input placeholder="Validade (MM/YY)" value={form.validade} onChange={e=>setForm({...form, validade: e.target.value})} maxLength={5} />
-            <input placeholder="CVV (3-4 dígitos)" value={form.codigoDeSeguranaca} onChange={e=>setForm({...form, codigoDeSeguranaca: e.target.value.replace(/\D/g,'')})} maxLength={4} />
+            <input placeholder="CVV (3-4 dígitos)" value={form.codigoDeSeguranca} onChange={e=>setForm({...form, codigoDeSeguranca: e.target.value.replace(/\D/g,'')})} maxLength={4} />
             <input placeholder="Descrição da compra" value={form.descricao} onChange={e=>setForm({...form, descricao: e.target.value})} maxLength={255} />
             <label style={{ fontSize: 12, color: '#666' }}>Data da transação</label>
             <input type="date" value={form.transactionDate || ''} onChange={e=>setForm({...form, transactionDate: e.target.value})} />
@@ -100,7 +100,7 @@ function formatDateDisplay(dateStr){
 
 export default function App(){
   const [pagamentos, setPagamentos] = useState([])
-  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' })
+  const [form, setForm] = useState({ nome: '', valor: '', numeroDoCartao: '', validade: '', codigoDeSeguranca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const [authHeader, setAuthHeader] = useState(null)
@@ -146,25 +146,25 @@ export default function App(){
     setForm({
       nome: p.nome || '',
       valor: p.valor != null ? String(p.valor) : '',
-      // backend has inconsistent field names in DTOs: handle both
-  numeroDoCarto: p.numeroDoCarto || p.numeroDoCartao || '',
-  validade: p.validade || '',
-  codigoDeSeguranaca: p.codigoDeSeguranaca || p.codigoDeSeguranca || '',
-  formaDePagamentoId: p.formaDePagamentoId || 1,
-  transactionDate: p.transactionDate || '',
-  descricao: p.descricao || ''
+      // accept either old or new server property names if present
+      numeroDoCartao: p.numeroDoCartao || p.numeroDoCarto || '',
+      validade: p.validade || '',
+      codigoDeSeguranca: p.codigoDeSeguranca || p.codigoDeSeguranaca || '',
+      formaDePagamentoId: p.formaDePagamentoId || 1,
+      transactionDate: p.transactionDate || '',
+      descricao: p.descricao || ''
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function cancelEdit(){ setEditingId(null); setForm({ nome: '', valor: '', numeroDoCarto: '', validade: '', codigoDeSeguranaca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' }) }
+  function cancelEdit(){ setEditingId(null); setForm({ nome: '', valor: '', numeroDoCartao: '', validade: '', codigoDeSeguranca: '', formaDePagamentoId: 1, transactionDate: '', descricao: '' }) }
 
   function validate(){
     if(!form.nome || form.nome.length < 2) return 'Nome deve ter ao menos 2 caracteres'
     if(!form.valor || isNaN(parseFloat(form.valor)) || parseFloat(form.valor) <= 0) return 'Valor inválido'
-    if(!form.numeroDoCarto || form.numeroDoCarto.replace(/\s+/g,'').length < 12) return 'Número de cartão inválido (mín 12 dígitos)'
-    if(!form.validade) return 'Validade obrigatória (MM/AA)'
-    if(!form.codigoDeSeguranaca || form.codigoDeSeguranaca.length < 3) return 'Código de segurança inválido'
+  if(!form.numeroDoCartao || form.numeroDoCartao.replace(/\s+/g,'').length < 12) return 'Número de cartão inválido (mín 12 dígitos)'
+  if(!form.validade) return 'Validade obrigatória (MM/AA)'
+  if(!form.codigoDeSeguranca || form.codigoDeSeguranca.length < 3) return 'Código de segurança inválido'
     return null
   }
 

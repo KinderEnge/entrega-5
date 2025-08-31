@@ -35,9 +35,26 @@ public class ControllerExceptionHandler {
                 "Dados inválidos", request.getRequestURI());
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            err.addError(fieldError.getField(), fieldError.getDefaultMessage());
+            String field = normalizeFieldName(fieldError.getField());
+            err.addError(field, fieldError.getDefaultMessage());
         }
         return ResponseEntity.status(status).body(err);
+    }
+
+    // Normalize common misspelled incoming property names so clients always
+    // receive the canonical DTO property names in validation responses.
+    private String normalizeFieldName(String raw) {
+        if (raw == null) return null;
+        switch (raw) {
+            case "numeroDoCarto":
+                return "numeroDoCartao";
+            case "codigoDeSeguranaca":
+                return "codigoDeSeguranca";
+            // accept possible nested paths like 'pagamento.numeroDoCarto'
+            default:
+                // replace known misspellings anywhere in the path
+                return raw.replace("numeroDoCarto", "numeroDoCartao").replace("codigoDeSeguranaca", "codigoDeSeguranca");
+        }
     }
 
     @ExceptionHandler(DatabaseException.class)

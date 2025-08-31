@@ -37,19 +37,15 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+    return http
+        .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                // Allow GET requests (read) without authentication so mobile can list
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.GET, "/pagamentos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/pagamentos/**").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.PUT, "/pagamentos/**").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/pagamentos/**").hasRole("MANAGER")
-                        .anyRequest().authenticated()
-                )
+        // For development: allow all access to /pagamentos/** (no auth)
+        .authorizeHttpRequests(authz -> authz
+            .requestMatchers("/pagamentos/**").permitAll()
+            .anyRequest().permitAll()
+        )
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

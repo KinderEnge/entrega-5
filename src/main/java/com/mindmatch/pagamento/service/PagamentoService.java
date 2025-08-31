@@ -85,9 +85,11 @@ public class PagamentoService {
     private void copyDtoToEntity(PagamentoDTO dto, Pagamento entity) {
         entity.setValor(dto.getValor());
         entity.setNome(dto.getNome());
-        entity.setNumeroDoCartao(dto.getNumeroDoCartao());
-        entity.setValidade(dto.getValidade());
-        entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranca());
-        entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
+    entity.setNumeroDoCartao(dto.getNumeroDoCartao());
+    entity.setValidade(dto.getValidade());
+    entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranca());
+    entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
+    entity.setTransactionDate(dto.getTransactionDate());
+    entity.setDescricao(dto.getDescricao());
     }
 }

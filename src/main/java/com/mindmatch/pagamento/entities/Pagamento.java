@@ -33,4 +33,6 @@ public class Pagamento {
     private Long formaDePagamentoId; //1 - crédito | 2 -débito
     @Column(name = "transaction_date")
     private LocalDate transactionDate;
+    @Column(length = 255)
+    private String descricao;
 }
